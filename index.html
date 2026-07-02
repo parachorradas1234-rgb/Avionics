@@ -9,40 +9,46 @@
         body { background-color: #0f172a; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
     </style>
 </head>
-<body class="p-4 max-w-md mx-auto pb-20">
+<body class="p-4 max-w-md mx-auto pb-20 pt-10">
 
-    <header class="text-center my-4">
+    <div class="fixed top-0 left-0 right-0 bg-slate-950/90 backdrop-blur-sm border-b border-rose-950 px-4 py-1.5 z-50 flex justify-start">
+        <span class="text-[10px] font-black tracking-wider text-rose-500 uppercase">
+            ⚠️ THIS DOCUMENT IS ONLY FOR REFERENCE
+        </span>
+    </div>
+
+    <header class="text-center my-4 mt-6">
         <h1 class="text-2xl font-bold text-sky-400 tracking-wide">AVIONICS SVQH</h1>
         <p class="text-xs text-slate-400">P/N Consumibles & Tools</p>
     </header>
 
-    <div class="flex bg-slate-800 rounded-lg p-1 mb-4 text-sm font-medium">
-        <button id="btn-lista" onclick="cambiarPestana('lista')" class="flex-1 py-2 rounded-md text-center bg-sky-500 text-white">
-            🔍 Buscar Listado
+    <div class="flex bg-slate-800 rounded-xl p-1 mb-4 text-sm font-medium">
+        <button id="btn-lista" onclick="cambiarPestana('lista')" class="flex-1 py-2 rounded-md text-center bg-sky-500 text-white transition-all">
+            🔍 Buscar Secciones
         </button>
-        <button id="btn-admin" onclick="cambiarPestana('admin')" class="flex-1 py-2 rounded-md text-center text-slate-400">
+        <button id="btn-admin" onclick="cambiarPestana('admin')" class="flex-1 py-2 rounded-md text-center text-slate-400 transition-all">
             ➕ Añadir Artículo
         </button>
     </div>
 
     <div id="pestana-lista" class="space-y-4">
         <div class="relative">
-            <input type="text" id="buscador" oninput="filtrarArticulos()" placeholder="Buscar por nombre o Part Number..." 
+            <input type="text" id="buscador" oninput="filtrarYAgrupar()" placeholder="Buscar artículo o Part Number..." 
                    class="w-full bg-slate-800 border border-slate-700 text-white placeholder-slate-400 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
         </div>
 
-        <p class="text-xs text-slate-400 pl-1"><span id="contador-items">0</span> artículos encontrados</p>
+        <p class="text-xs text-slate-400 pl-1"><span id="contador-items">0</span> piezas disponibles en total</p>
 
-        <div id="lista-articulos" class="space-y-3">
+        <div id="contenedor-secciones" class="space-y-3">
             </div>
     </div>
 
     <div id="pestana-admin" class="hidden space-y-4">
         <div id="bloqueo-auth" class="bg-slate-800 border border-slate-700 rounded-2xl p-6 text-center space-y-4">
             <div class="text-4xl">🔒</div>
-            <h3 class="text-base font-semibold">Se requiere contraseña</h3>
-            <p class="text-xs text-slate-400">Introduce la contraseña de Avionics SVQH para añadir nuevas piezas.</p>
-            <input type="password" id="input-password" placeholder="Contraseña de acceso" 
+            <h3 class="text-base font-semibold">Acceso Protegido</h3>
+            <p class="text-xs text-slate-400">Introduce la contraseña de Avionics SVQH para dar de alta componentes.</p>
+            <input type="password" id="input-password" placeholder="Contraseña" 
                    class="w-full bg-slate-900 border border-slate-700 text-center rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
             <button onclick="verificarPassword()" class="w-full bg-sky-500 hover:bg-sky-600 font-semibold py-2 rounded-xl text-sm transition">
                 Acceder
@@ -51,26 +57,26 @@
 
         <div id="formulario-anadir" class="hidden bg-slate-800 border border-slate-700 rounded-2xl p-5 space-y-4">
             <div class="flex justify-between items-center border-b border-slate-700 pb-2">
-                <h3 class="font-semibold text-green-400 text-sm">✓ Autorizado: Nuevo Artículo</h3>
-                <button onclick="cerrarSesion()" class="text-xs text-rose-400 underline">Cerrar sesión</button>
+                <h3 class="font-semibold text-green-400 text-sm">✓ Personal Autorizado</h3>
+                <button onclick="cerrarSesion()" class="text-xs text-rose-400 underline">Salir</button>
             </div>
             
             <div>
                 <label class="block text-xs text-slate-400 mb-1">Nombre del Artículo / Material</label>
-                <input type="text" id="form-articulo" placeholder="Ej. O-RING 3" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-sky-500">
+                <input type="text" id="form-articulo" placeholder="Ej. O-RING 3" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
             </div>
 
             <div>
                 <label class="block text-xs text-slate-400 mb-1">Part Number (P/N)</label>
-                <input type="text" id="form-pn" placeholder="Ej. MS29513-010" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-sky-500">
+                <input type="text" id="form-pn" placeholder="Ej. MS29513-010" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
             </div>
 
             <div>
-                <label class="block text-xs text-slate-400 mb-1">Sección o Categoría</label>
-                <input type="text" id="form-seccion" placeholder="Ej. Consumibles (General) o Tools" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-sky-500">
+                <label class="block text-xs text-slate-400 mb-1">Sección o Categoría (Grupo)</label>
+                <input type="text" id="form-seccion" placeholder="Ej. Consumibles (General)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
             </div>
 
-            <button onclick="guardarNuevoArticulo()" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl text-sm shadow-md transition">
+            <button onclick="guardarNuevoArticulo()" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl text-sm transition">
                 Guardar Artículo
             </button>
         </div>
@@ -80,7 +86,8 @@
     <script>
         let listaArticulos = JSON.parse(localStorage.getItem('svqh_items')) || ARTICULOS_INICIALES;
         let autenticado = false;
-        const CLAVE_CORRECTA = "SVQH1234"; // <<< AQUÍ SE CAMBIA LA CONTRASEÑA
+        const CLAVE_CORRECTA = "SVQH1234"; // <<< CONTRASEÑA POR DEFECTO
+        let seccionesAbiertas = {}; // Rastrea qué desplegables están abiertos
 
         function cambiarPestana(target) {
             const btnLista = document.getElementById('btn-lista');
@@ -89,60 +96,118 @@
             const pAdmin = document.getElementById('pestana-admin');
 
             if (target === 'lista') {
-                btnLista.className = "flex-1 py-2 rounded-md text-center bg-sky-500 text-white";
-                btnAdmin.className = "flex-1 py-2 rounded-md text-center text-slate-400";
+                btnLista.className = "flex-1 py-2 rounded-md text-center bg-sky-500 text-white transition-all";
+                btnAdmin.className = "flex-1 py-2 rounded-md text-center text-slate-400 transition-all";
                 pLista.classList.remove('hidden');
                 pAdmin.classList.add('hidden');
-                renderListar(listaArticulos);
+                filtrarYAgrupar();
             } else {
-                btnAdmin.className = "flex-1 py-2 rounded-md text-center bg-sky-500 text-white";
-                btnLista.className = "flex-1 py-2 rounded-md text-center text-slate-400";
+                btnAdmin.className = "flex-1 py-2 rounded-md text-center bg-sky-500 text-white transition-all";
+                btnLista.className = "flex-1 py-2 rounded-md text-center text-slate-400 transition-all";
                 pAdmin.classList.remove('hidden');
                 pLista.classList.add('hidden');
                 evaluarAuthUI();
             }
         }
 
-        function renderListar(items) {
-            const container = document.getElementById('lista-articulos');
-            const contador = document.getElementById('contador-items');
-            container.innerHTML = '';
-            contador.innerText = items.length;
-
-            if (items.length === 0) {
-                container.innerHTML = `<div class="text-center text-xs text-slate-500 py-8">No se encontraron artículos.</div>`;
-                return;
-            }
-
-            items.forEach(item => {
-                const card = document.createElement('div');
-                card.className = "bg-slate-800 border border-slate-700/60 rounded-xl p-4 shadow-sm space-y-1";
-                card.innerHTML = `
-                    <div class="flex justify-between items-start">
-                        <h4 class="font-bold text-white text-sm uppercase tracking-wide pr-2">${item.articulo}</h4>
-                        <span class="text-[10px] bg-slate-900 text-sky-400 font-semibold px-2 py-0.5 rounded border border-sky-900/40 shrink-0">
-                            ${item.seccion}
-                        </span>
-                    </div>
-                    <div class="flex items-center justify-between pt-1">
-                        <span class="text-xs text-slate-400">P/N:</span>
-                        <code class="text-xs font-mono font-bold text-amber-400 select-all bg-slate-900/60 px-2 py-0.5 rounded border border-slate-700/40">${item.pn}</code>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        function filtrarArticulos() {
+        // FUNCIÓN PRINCIPAL DE AGRUPAMIENTO Y RENDERIZADO EN ACORDEÓN
+        function filtrarYAgrupar() {
             const query = document.getElementById('buscador').value.toLowerCase().trim();
+            const contenedor = document.getElementById('contenedor-secciones');
+            const contadorGral = document.getElementById('contador-items');
+            
+            contenedor.innerHTML = '';
+
+            // Filtrar elementos según el buscador
             const filtrados = listaArticulos.filter(item => 
                 item.articulo.toLowerCase().includes(query) || 
                 item.pn.toLowerCase().includes(query) ||
                 item.seccion.toLowerCase().includes(query)
             );
-            renderListar(filtrados);
+
+            contadorGral.innerText = filtrados.length;
+
+            if (filtrados.length === 0) {
+                contenedor.innerHTML = `<div class="text-center text-xs text-slate-500 py-8">No se encontraron resultados para la búsqueda.</div>`;
+                return;
+            }
+
+            // Agrupar por la propiedad "seccion"
+            const grupos = {};
+            filtrados.forEach(item => {
+                if (!grupos[item.seccion]) {
+                    grupos[item.seccion] = [];
+                }
+                grupos[item.seccion].push(item);
+            });
+
+            // Generar los módulos colapsables para cada grupo
+            Object.keys(grupos).sort().forEach(nombreSeccion => {
+                const itemsDelGrupo = grupos[nombreSeccion];
+                
+                // Si el usuario está buscando algo específico, forzamos que se abran los grupos coincidentes
+                const estaAbierto = query !== '' ? true : (seccionesAbiertas[nombreSeccion] || false);
+
+                const divGrupo = document.createElement('div');
+                divGrupo.className = "bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-md";
+
+                // Botón Cabecera del Desplegable
+                const botonCabecera = document.createElement('button');
+                botonCabecera.className = "w-full flex justify-between items-center bg-slate-800 px-4 py-3 text-left font-bold text-xs text-sky-400 tracking-wider uppercase focus:outline-none transition-colors hover:bg-slate-800/80";
+                botonCabecera.onclick = () => togglerSeccion(nombreSeccion);
+                botonCabecera.innerHTML = `
+                    <div class="flex items-center space-x-2">
+                        <span>📂 ${nombreSeccion}</span>
+                        <span class="bg-slate-950 text-slate-400 font-mono text-[10px] px-1.5 py-0.5 rounded-full">${itemsDelGrupo.length}</span>
+                    </div>
+                    <span id="flecha-${nombreSeccion.replace(/\s+/g, '-')}" class="text-slate-400 font-mono text-sm transition-transform duration-200 ${estaAbierto ? 'rotate-180' : ''}">
+                        ${estaAbierto ? '▲' : '▼'}
+                    </span>
+                `;
+                divGrupo.appendChild(botonCabecera);
+
+                // Contenedor de las tarjetas internas
+                const contenedorTarjetas = document.createElement('div');
+                contenedorTarjetas.id = `bloque-${nombreSeccion.replace(/\s+/g, '-')}`;
+                contenedorTarjetas.className = `p-3 space-y-2.5 bg-slate-900/40 ${estaAbierto ? '' : 'hidden'}`;
+
+                itemsDelGrupo.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = "bg-slate-800 border border-slate-700/40 rounded-lg p-3 flex flex-col space-y-1";
+                    card.innerHTML = `
+                        <h4 class="font-bold text-white text-xs tracking-wide uppercase">${item.articulo}</h4>
+                        <div class="flex items-center justify-between text-xs pt-1">
+                            <span class="text-[11px] text-slate-400 font-medium">P/N:</span>
+                            <code class="text-[11px] font-mono font-bold text-amber-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800 select-all">${item.pn}</code>
+                        </div>
+                    `;
+                    contenedorTarjetas.appendChild(card);
+                });
+
+                divGrupo.appendChild(contenedorTarjetas);
+                contenedor.appendChild(divGrupo);
+            });
         }
 
+        function togglerSeccion(nombreSeccion) {
+            const idLimpio = nombreSeccion.replace(/\s+/g, '-');
+            const bloque = document.getElementById(`bloque-${idLimpio}`);
+            const flecha = document.getElementById(`flecha-${idLimpio}`);
+            
+            if (bloque.classList.contains('hidden')) {
+                bloque.classList.remove('hidden');
+                flecha.innerText = '▲';
+                flecha.classList.add('rotate-180');
+                seccionesAbiertas[nombreSeccion] = true;
+            } else {
+                bloque.classList.add('hidden');
+                flecha.innerText = '▼';
+                flecha.classList.remove('rotate-180');
+                seccionesAbiertas[nombreSeccion] = false;
+            }
+        }
+
+        // SEGURIDAD Y EDICIÓN
         function verificarPassword() {
             const pass = document.getElementById('input-password').value;
             if (pass === CLAVE_CORRECTA) {
@@ -174,25 +239,29 @@
         function guardarNuevoArticulo() {
             const art = document.getElementById('form-articulo').value.trim();
             const pn = document.getElementById('form-pn').value.trim();
-            const sec = document.getElementById('form-seccion').value.trim();
+            let sec = document.getElementById('form-seccion').value.trim();
 
             if (!art || !pn || !sec) {
-                alert("Por favor rellena todos los campos.");
+                alert("Por favor, completa todos los campos del formulario.");
                 return;
             }
 
             listaArticulos.unshift({ articulo: art, pn: pn, seccion: sec });
             localStorage.setItem('svqh_items', JSON.stringify(listaArticulos));
 
-            alert("¡Artículo guardado con éxito!");
+            alert("¡Artículo añadido correctamente!");
             
             document.getElementById('form-articulo').value = '';
             document.getElementById('form-pn').value = '';
             document.getElementById('form-seccion').value = '';
+            
+            // Forzar que la nueva sección se muestre abierta
+            seccionesAbiertas[sec] = true;
             cambiarPestana('lista');
         }
 
-        renderListar(listaArticulos);
+        // Carga inicial
+        filtrarYAgrupar();
     </script>
 </body>
 </html>
