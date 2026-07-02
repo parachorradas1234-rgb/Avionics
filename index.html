@@ -183,18 +183,23 @@
                 <h3 class="font-semibold text-green-400 text-sm">✓ Personal Autorizado</h3>
                 <button onclick="cerrarSesion()" class="text-xs text-rose-400 underline">Salir</button>
             </div>
+            
             <div>
                 <label class="block text-xs text-slate-400 mb-1">Nombre del Artículo / Material</label>
                 <input type="text" id="form-articulo" placeholder="Ej. O-RING 3" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
             </div>
+            
             <div>
                 <label class="block text-xs text-slate-400 mb-1">Part Number (P/N)</label>
                 <input type="text" id="form-pn" placeholder="Ej. MS29513-010" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
             </div>
+            
             <div>
                 <label class="block text-xs text-slate-400 mb-1">Sección o Categoría (Grupo)</label>
-                <input type="text" id="form-seccion" placeholder="Ej. General o Tools" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+                <select id="form-seccion" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-sky-500">
+                    </select>
             </div>
+            
             <button onclick="guardarNuevoArticulo()" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl text-sm transition">Guardar Artículo</button>
         </div>
     </div>
@@ -230,7 +235,29 @@
                 btnAdmin.className = "flex-1 py-2.5 rounded-lg text-center bg-sky-500 text-white transition-all";
                 pAdmin.classList.remove('hidden');
                 evaluarAuthUI();
+                actualizarDesplegableSecciones(); // Regenera el menú desplegable al abrir la sección
             }
+        }
+
+        // FUNCIÓN QUE BUSCA SECCIONES EXISTENTES Y RELLENA EL SELECT DINÁMICAMENTE
+        function actualizarDesplegableSecciones() {
+            const selectSeccion = document.getElementById('form-seccion');
+            if (!selectSeccion) return;
+
+            // Conseguir una lista limpia y sin duplicados de las secciones actuales
+            const setSecciones = new Set();
+            listaArticulos.forEach(item => {
+                let nombreLimpio = item.seccion.replace(/consumibles\s*/gi, '').replace(/[\(\)]/g, '').trim();
+                if(nombreLimpio) setSecciones.add(nombreLimpio);
+            });
+
+            // Ordenarlas alfabéticamente
+            const listaOrdenada = Array.from(setSecciones).sort();
+
+            // Insertar las opciones dentro del Select
+            selectSeccion.innerHTML = listaOrdenada.map(sec => 
+                `<option value="${sec}" class="bg-slate-900 text-white">${sec}</option>`
+            ).join('');
         }
 
         function filtrarYAgrupar() {
@@ -241,7 +268,6 @@
             contenedor.innerHTML = '';
 
             const filtrados = listaArticulos.filter(item => {
-                // Eliminar rastro de "consumibles" de la lógica de búsqueda por si el usuario escribe la palabra
                 let secLimpia = item.seccion.replace(/consumibles\s*/gi, '').replace(/[\(\)]/g, '').trim();
                 return item.articulo.toLowerCase().includes(query) || 
                        item.pn.toLowerCase().includes(query) ||
@@ -257,7 +283,6 @@
 
             const grupos = {};
             filtrados.forEach(item => {
-                // LIMPIEZA FORZADA DE "CONSUMIBLES" Y PARÉNTESIS ANTES DE AGRUPAR
                 let nombreLimpio = item.seccion.replace(/consumibles\s*/gi, '').replace(/[\(\)]/g, '').trim();
                 if (!grupos[nombreLimpio]) {
                     grupos[nombreLimpio] = [];
@@ -330,6 +355,7 @@
             if (pass === CLAVE_CORRECTA) {
                 autenticado = true;
                 evaluarAuthUI();
+                actualizarDesplegableSecciones(); // Asegura la carga tras loguearse
             } else {
                 alert("Contraseña incorrecta");
             }
@@ -356,15 +382,12 @@
         function guardarNuevoArticulo() {
             const art = document.getElementById('form-articulo').value.trim();
             const pn = document.getElementById('form-pn').value.trim();
-            let sec = document.getElementById('form-seccion').value.trim();
+            const sec = document.getElementById('form-seccion').value; // Toma el valor directo del menú desplegable
 
             if (!art || !pn || !sec) {
                 alert("Por favor, completa todos los campos.");
                 return;
             }
-
-            // Sanitizar la sección si la meten a mano con "consumibles"
-            sec = sec.replace(/consumibles\s*/gi, '').replace(/[\(\)]/g, '').trim();
 
             listaArticulos.unshift({ articulo: art, pn: pn, seccion: sec });
             localStorage.setItem('svqh_items', JSON.stringify(listaArticulos));
@@ -373,7 +396,6 @@
             
             document.getElementById('form-articulo').value = '';
             document.getElementById('form-pn').value = '';
-            document.getElementById('form-seccion').value = '';
             
             seccionesAbiertas[sec] = true;
             cambiarPestana('lista');
