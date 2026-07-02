@@ -9,11 +9,11 @@
         body { background-color: #0f172a; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
     </style>
 </head>
-<body class="p-4 max-w-md mx-auto pb-20 pt-10">
+<body class="p-4 max-w-md mx-auto pb-20 pt-8">
 
-    <div class="fixed top-0 left-0 right-0 bg-slate-950/90 backdrop-blur-sm border-b border-rose-950 px-4 py-1.5 z-50 flex justify-start">
-        <span class="text-[10px] font-black tracking-wider text-rose-500 uppercase">
-            ⚠️ THIS DOCUMENT IS ONLY FOR REFERENCE
+    <div class="fixed top-2 left-3 z-50 pointer-events-none">
+        <span class="text-[10px] font-black tracking-wider text-rose-500 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+            ONLY FOR REFERENCE
         </span>
     </div>
 
@@ -73,7 +73,7 @@
 
             <div>
                 <label class="block text-xs text-slate-400 mb-1">Sección o Categoría (Grupo)</label>
-                <input type="text" id="form-seccion" placeholder="Ej. Consumibles (General)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
+                <input type="text" id="form-seccion" placeholder="Ej. General o Tools" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none">
             </div>
 
             <button onclick="guardarNuevoArticulo()" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl text-sm transition">
@@ -86,8 +86,8 @@
     <script>
         let listaArticulos = JSON.parse(localStorage.getItem('svqh_items')) || ARTICULOS_INICIALES;
         let autenticado = false;
-        const CLAVE_CORRECTA = "SVQH1234"; // <<< CONTRASEÑA POR DEFECTO
-        let seccionesAbiertas = {}; // Rastrea qué desplegables están abiertos
+        const CLAVE_CORRECTA = "SVQH1234"; 
+        let seccionesAbiertas = {}; 
 
         function cambiarPestana(target) {
             const btnLista = document.getElementById('btn-lista');
@@ -110,7 +110,6 @@
             }
         }
 
-        // FUNCIÓN PRINCIPAL DE AGRUPAMIENTO Y RENDERIZADO EN ACORDEÓN
         function filtrarYAgrupar() {
             const query = document.getElementById('buscador').value.toLowerCase().trim();
             const contenedor = document.getElementById('contenedor-secciones');
@@ -118,7 +117,6 @@
             
             contenedor.innerHTML = '';
 
-            // Filtrar elementos según el buscador
             const filtrados = listaArticulos.filter(item => 
                 item.articulo.toLowerCase().includes(query) || 
                 item.pn.toLowerCase().includes(query) ||
@@ -132,7 +130,6 @@
                 return;
             }
 
-            // Agrupar por la propiedad "seccion"
             const grupos = {};
             filtrados.forEach(item => {
                 if (!grupos[item.seccion]) {
@@ -141,17 +138,14 @@
                 grupos[item.seccion].push(item);
             });
 
-            // Generar los módulos colapsables para cada grupo
             Object.keys(grupos).sort().forEach(nombreSeccion => {
                 const itemsDelGrupo = grupos[nombreSeccion];
-                
-                // Si el usuario está buscando algo específico, forzamos que se abran los grupos coincidentes
                 const estaAbierto = query !== '' ? true : (seccionesAbiertas[nombreSeccion] || false);
+                const idLimpio = nombreSeccion.replace(/[^a-zA-Z0-9]/g, '-');
 
                 const divGrupo = document.createElement('div');
                 divGrupo.className = "bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-md";
 
-                // Botón Cabecera del Desplegable
                 const botonCabecera = document.createElement('button');
                 botonCabecera.className = "w-full flex justify-between items-center bg-slate-800 px-4 py-3 text-left font-bold text-xs text-sky-400 tracking-wider uppercase focus:outline-none transition-colors hover:bg-slate-800/80";
                 botonCabecera.onclick = () => togglerSeccion(nombreSeccion);
@@ -160,15 +154,14 @@
                         <span>📂 ${nombreSeccion}</span>
                         <span class="bg-slate-950 text-slate-400 font-mono text-[10px] px-1.5 py-0.5 rounded-full">${itemsDelGrupo.length}</span>
                     </div>
-                    <span id="flecha-${nombreSeccion.replace(/\s+/g, '-')}" class="text-slate-400 font-mono text-sm transition-transform duration-200 ${estaAbierto ? 'rotate-180' : ''}">
+                    <span id="flecha-${idLimpio}" class="text-slate-400 font-mono text-sm transition-transform duration-200 ${estaAbierto ? 'rotate-180' : ''}">
                         ${estaAbierto ? '▲' : '▼'}
                     </span>
                 `;
                 divGrupo.appendChild(botonCabecera);
 
-                // Contenedor de las tarjetas internas
                 const contenedorTarjetas = document.createElement('div');
-                contenedorTarjetas.id = `bloque-${nombreSeccion.replace(/\s+/g, '-')}`;
+                contenedorTarjetas.id = `bloque-${idLimpio}`;
                 contenedorTarjetas.className = `p-3 space-y-2.5 bg-slate-900/40 ${estaAbierto ? '' : 'hidden'}`;
 
                 itemsDelGrupo.forEach(item => {
@@ -190,24 +183,21 @@
         }
 
         function togglerSeccion(nombreSeccion) {
-            const idLimpio = nombreSeccion.replace(/\s+/g, '-');
+            const idLimpio = nombreSeccion.replace(/[^a-zA-Z0-9]/g, '-');
             const bloque = document.getElementById(`bloque-${idLimpio}`);
             const flecha = document.getElementById(`flecha-${idLimpio}`);
             
             if (bloque.classList.contains('hidden')) {
                 bloque.classList.remove('hidden');
                 flecha.innerText = '▲';
-                flecha.classList.add('rotate-180');
                 seccionesAbiertas[nombreSeccion] = true;
             } else {
                 bloque.classList.add('hidden');
                 flecha.innerText = '▼';
-                flecha.classList.remove('rotate-180');
                 seccionesAbiertas[nombreSeccion] = false;
             }
         }
 
-        // SEGURIDAD Y EDICIÓN
         function verificarPassword() {
             const pass = document.getElementById('input-password').value;
             if (pass === CLAVE_CORRECTA) {
@@ -242,7 +232,7 @@
             let sec = document.getElementById('form-seccion').value.trim();
 
             if (!art || !pn || !sec) {
-                alert("Por favor, completa todos los campos del formulario.");
+                alert("Por favor, completa todos los campos.");
                 return;
             }
 
@@ -255,12 +245,10 @@
             document.getElementById('form-pn').value = '';
             document.getElementById('form-seccion').value = '';
             
-            // Forzar que la nueva sección se muestre abierta
             seccionesAbiertas[sec] = true;
             cambiarPestana('lista');
         }
 
-        // Carga inicial
         filtrarYAgrupar();
     </script>
 </body>
