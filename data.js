@@ -1,142 +1,114 @@
-const ARTICULOS_INICIALES = [
-  { "articulo": "O-RING 1", "pn": "MS9385-07", "seccion": "General" },
-  { "articulo": "O-RING 2", "pn": "S9028A905", "seccion": "General" },
-  { "articulo": "MOLYKOTE4", "pn": "M0LYKOTE44", "seccion": "General" },
-  { "articulo": "KRYTOX P", "pn": "GPL206", "seccion": "General" },
-  { "articulo": "NEVER SEEZ COMPOUND", "pn": "NSBT8N", "seccion": "General" },
-  { "articulo": "PACKING", "pn": "AS3582-028", "seccion": "ATC Antennas" },
-  { "articulo": "SEALANT", "pn": "BMS5-95  / PS870B1-2", "seccion": "ATC Antennas" },
-  { "articulo": "COMPOUND", "pn": "DC4", "seccion": "ATC Antennas" },
-  { "articulo": "EMERGENCY LIGHT SIGNS SMALL LAMPS", "pn": "3071BPEGPL", "seccion": "Cabin Lights" },
-  { "articulo": "EMERGENCY LIGHTS EXTERIOR LAMPS", "pn": "767", "seccion": "Cabin Lights" },
-  { "articulo": "BELT AND NO SMOKE LIGHT", "pn": "387", "seccion": "Cabin Lights" },
-  { "articulo": "READING LIGHT", "pn": "9204", "seccion": "Cabin Lights" },
-  { "articulo": "FUEL STATION LIGHT", "pn": "GE1495", "seccion": "Cabin Lights" },
-  { "articulo": "WORK LIGHT COVER", "pn": "239052-13", "seccion": "Cabin Lights" },
-  { "articulo": "FIRE TEST LIGHT COVER GREEN", "pn": "682-1001-001", "seccion": "Cabin Lights" },
-  { "articulo": "LENS COVER FOR GALLEY LIGHT", "pn": "239004-19", "seccion": "Cabin Lights" },
-  { "articulo": "LAMP BULB FOR EEC ALT SWITCH", "pn": "MS24515-685AS15", "seccion": "Cabin Lights" },
-  { "articulo": "ASSY LOWER EMERG SIGN", "pn": "70-0366-11", "seccion": "Cabin Lights" },
-  { "articulo": "GALLEY BULB", "pn": "OLN115-18K", "seccion": "Cabin Lights" },
-  { "articulo": "BASE WHITE EMERG SIGNS", "pn": "207330", "seccion": "Cabin Lights" },
-  { "articulo": "EMERG SIGNS LENS (EXIT)", "pn": "207377-1001", "seccion": "Cabin Lights" },
-  { "articulo": "FMC CDU shim", "pn": "137300-78", "seccion": "CDU" },
-  { "articulo": "FMC CDU screw", "pn": "117357-21", "seccion": "CDU" },
-  { "articulo": "BATTERIES", "pn": "ADD71701-100", "seccion": "Emerg Batteries" },
-  { "articulo": "FUSE", "pn": "B215-06", "seccion": "Emerg Batteries" },
-  { "articulo": "BATTERIES", "pn": "P4-01-0021", "seccion": "Flashlight" },
-  { "articulo": "SHIELD", "pn": "A1-18-1030", "seccion": "Flashlight" },
-  { "articulo": "SET SCREW KIT", "pn": "9416", "seccion": "Megaphone" },
-  { "articulo": "COVER (BLUE)", "pn": "5180453792", "seccion": "Floorpath" },
-  { "articulo": "ENDCAP 1CM", "pn": "417N5212-1CM", "seccion": "Floorpath" },
-  { "articulo": "BULB (EMERGENCY LIGHT)", "pn": "3071BPEGPL", "seccion": "Floorpath" },
-  { "articulo": "EMERG FLOORPATH LIGHT ASSY", "pn": "81000-22608ATS", "seccion": "Floorpath" },
-  { "articulo": "FLOORPATH RECEPTACLE - PIN", "pn": "60983-3", "seccion": "Floorpath" },
-  { "articulo": "FLOORPATH LIGHT", "pn": "60888-4", "seccion": "Floorpath" },
-  { "articulo": "CRIMP TOOL PIN", "pn": "10131-4", "seccion": "Floorpath" },
-  { "articulo": "COVER TRACK (BLACK)", "pn": "ACIFL00121-02", "seccion": "Floorpath" },
-  { "articulo": "RED LENS", "pn": "S417N509-6", "seccion": "Floorpath" },
-  { "articulo": "WHITE LENS", "pn": "S417N509-2", "seccion": "Floorpath" },
-  { "articulo": "SOCKETS EMERG LIGHTS", "pn": "60988-3", "seccion": "Floorpath" },
-  { "articulo": "SAFTGLO TAPE", "pn": "POLYKEN108FR0-5", "seccion": "Floorpath" },
-  { "articulo": "LIGHT", "pn": "HLX64621", "seccion": "Logo Lights" },
-  { "articulo": "SCREWS LARGE", "pn": "BACB30ZE4-8", "seccion": "Logo Lights" },
-  { "articulo": "SCREWS SMALL", "pn": "BACB30XD3K8", "seccion": "Logo Lights" },
-  { "articulo": "SPRING A", "pn": "81116-37601", "seccion": "Logo Lights" },
-  { "articulo": "SPRING B", "pn": "81115-37601", "seccion": "Logo Lights" },
-  { "articulo": "SOCKET", "pn": "81004-37602", "seccion": "Logo Lights" },
-  { "articulo": "RED SEALANT", "pn": "PR1428B1-2", "seccion": "LRRA" },
-  { "articulo": "BLACK SEALANT", "pn": "BMS5-95  / PS870B1-2", "seccion": "LRRA" },
-  { "articulo": "GASKET", "pn": "AG723000-40", "seccion": "LRRA" },
-  { "articulo": "GREEN SEALANT", "pn": "HT3326-5-50", "seccion": "LRRA" },
-  { "articulo": "ANTENNA", "pn": "S67-2002-28", "seccion": "LRRA" },
-  { "articulo": "SCREWS", "pn": "BACB30NM3K4", "seccion": "Main & Aux Batteries" },
-  { "articulo": "BATTERY", "pn": "024147-000", "seccion": "Main & Aux Batteries" },
-  { "articulo": "CONNECTOR", "pn": "BACC45FT12-12P", "seccion": "Main & Aux Batteries" },
-  { "articulo": "FUEL PANEL E&E", "pn": "NAS514P1032-16", "seccion": "Panels Screws" },
-  { "articulo": "E&E DOOR SWITCH PANEL", "pn": "NAS514P832-12", "seccion": "Panels Screws" },
-  { "articulo": "NUTPLATE FUEL PANEL E&E", "pn": "BACN10ZR3CD", "seccion": "Panels Screws" },
-  { "articulo": "Cockpit cap (rosca)", "pn": "15PA90-6W", "seccion": "Ramps" },
-  { "articulo": "COCKPit cap (fino)", "pn": "69-44578-2", "seccion": "Ramps" },
-  { "articulo": "Cabin Temp sensor filter (small)", "pn": "412A1605-41", "seccion": "Ramps" },
-  { "articulo": "Flt comp temp sensor filter (big) (cockpit)", "pn": "213A6404-1", "seccion": "Ramps" },
-  { "articulo": "INOP STICKER", "pn": "INT1072", "seccion": "Ramps" },
-  { "articulo": "GRILLE (TAPADERA DEL FILTRO DE CABINA, NO COCKPIT)", "pn": "412N1122-3A", "seccion": "Ramps" },
-  { "articulo": "BULB GALLEY", "pn": "MSC115", "seccion": "Ramps" },
-  { "articulo": "BEZEL", "pn": "11-6557-7GATS", "seccion": "Ramps" },
-  { "articulo": "COVER CALL LIGHT FOR CABIN CREW", "pn": "25-1734-15", "seccion": "Ramps" },
-  { "articulo": "LACING TAPE", "pn": "BMS13-54TY3CL1FC", "seccion": "Skew Sensor" },
-  { "articulo": "TAPE", "pn": "SCOTH70", "seccion": "Skew Sensor" },
-  { "articulo": "AV25", "pn": "AV25", "seccion": "Skew Sensor" },
-  { "articulo": "D50", "pn": "D5026NS", "seccion": "Skew Sensor" },
-  { "articulo": "NUT SCREWS HARNESS EGT", "pn": "AS3486-10", "seccion": "Engines" },
-  { "articulo": "MOX TAPE", "pn": "M0XNESS620B1", "seccion": "Engines" },
-  { "articulo": "TAPE HIGHT TEMPERATURE ALUMINIUM FOIL", "pn": "3M363", "seccion": "Engines" },
-  { "articulo": "TAPE- GLASS CLOTH WITH SILICONE ADHESIVE. HIGH TEMP", "pn": "3M361", "seccion": "Engines" },
-  { "articulo": "LOCKWIRE FOR HARNESS REPAIR", "pn": "MS20995C15", "seccion": "Engines" },
-  { "articulo": "CLAMP BANDS CONNECTOR", "pn": "600-052", "seccion": "Engines" },
-  { "articulo": "YELLOW / WHITE", "pn": "M81969-14-04", "seccion": "Inserts/Extractors" },
-  { "articulo": "BLUE / WHITE", "pn": "M81969-14-03", "seccion": "Inserts/Extractors" },
-  { "articulo": "RED / WHITE", "pn": "M81969-14-02", "seccion": "Inserts/Extractors" },
-  { "articulo": "RED / WHITE (VARIANT)", "pn": "M81969-14-11", "seccion": "Inserts/Extractors" },
-  { "articulo": "GREEN / WHITE", "pn": "M81969-14-01", "seccion": "Inserts/Extractors" },
-  { "articulo": "VERDE / ROJO", "pn": "CTA1160", "seccion": "Inserts/Extractors" },
-  { "articulo": "GREEN / WHITE METAL", "pn": "M81969-1-01", "seccion": "Inserts/Extractors" },
-  { "articulo": "RED / WHITE METAL", "pn": "M81969-1-02", "seccion": "Inserts/Extractors" },
-  { "articulo": "BLUE / WHITE METAL", "pn": "M81969-1-03", "seccion": "Inserts/Extractors" },
-  { "articulo": "ELEVATOR PLUG FOR ELEVATOR LEAK TEST", "pn": "MS21913V6P", "seccion": "Others" },
-  { "articulo": "LOCKWIRE FLIGHT DECK SWITCHES", "pn": "MS20995CY15", "seccion": "Others" },
-  { "articulo": "RODFILLER CLAMPS", "pn": "69B47961-2", "seccion": "Others" },
-  { "articulo": "ANTISTATIC BAGS", "pn": "ESDBAG62X48", "seccion": "Others" },
-  { "articulo": "STATIC DISCHARGER LARGE", "pn": "740001", "seccion": "Others" },
-  { "articulo": "STATIC DISCHARGER SHORT", "pn": "740007", "seccion": "Others" },
-  { "articulo": "SPLICE MOISTURE RED", "pn": "D436-36", "seccion": "Splices" },
-  { "articulo": "SPLICE MOISTURE BLUE", "pn": "D436-37", "seccion": "Splices" },
-  { "articulo": "SPLICE MOISTURE YELLOW", "pn": "D436-38", "seccion": "Splices" },
-  { "articulo": "END CAP CRIMP TYPE (RED)", "pn": "324485", "seccion": "Splices" },
-  { "articulo": "TEFLON TAPE", "pn": "P421", "seccion": "Tapes/Harness Repair" },
-  { "articulo": "SLEEVING-POLYESTER WHITE 1/4 INCH", "pn": "BMS13-52-5-025-9", "seccion": "Polyester Sleeving" },
-  { "articulo": "SLEEVING-POLYESTER", "pn": "BMS1352-5-075N", "seccion": "Polyester Sleeving" },
-  { "articulo": "SLEEVING-POLYESTER", "pn": "BMS13-52-5-100-9", "seccion": "Polyester Sleeving" },
-  { "articulo": "SLEEVING-POLYESTER", "pn": "BMS13-52-5-050-9", "seccion": "Polyester Sleeving" },
-  { "articulo": "HEATSHRINK 1/4 YELLOW (SPEEDBRAKE SWITCH)", "pn": "RNF100-1-4-4", "seccion": "Heatshrinks" },
-  { "articulo": "SMALL SCREW RACK CONNECTOR", "pn": "BACS12HN06-6", "seccion": "Screws & Racks" },
-  { "articulo": "SCREW TERMINAL BLOCK TAPPING WINDOWS", "pn": "NAS1801-04-7", "seccion": "Screws & Racks" },
-  { "articulo": "Link to check Tie straps size CLICK HERE", "pn": "BACS38K10", "seccion": "Strap - Cable Tie" },
-  { "articulo": "MCP SCREW (BLACK)", "pn": "BACS12CK3H7", "seccion": "Cockpit" },
-  { "articulo": "MCP WASHER (BLACK)", "pn": "NAS1149C0332B", "seccion": "Cockpit" },
-  { "articulo": "CAP PSU CONNECTORS", "pn": "M85049/138-47A", "seccion": "Cabin Parts" },
-  { "articulo": "AIRSTAIR LAMPS", "pn": "1864", "seccion": "Airstairs" },
-  { "articulo": "AIRSTAIR LIGHT LENS", "pn": "870661-1", "seccion": "Airstairs" },
-  { "articulo": "TERMINAL SPADE TYPE (AIRSTAIRS LIGHTS)", "pn": "3-350816-2", "seccion": "Airstairs" },
-  { "articulo": "Terminal lug landing light", "pn": "323750", "seccion": "Landing Lights" },
-  { "articulo": "Inop tag label (small size)", "pn": "CBTAG", "seccion": "Tags and Collars" },
-  { "articulo": "Collars inop system (remove before flight)", "pn": "S4933959-523", "seccion": "Tags and Collars" },
-  { "articulo": "White collar", "pn": "10164-3", "seccion": "Tags and Collars" },
-  { "articulo": "Red collar (inop system)", "pn": "10237-1", "seccion": "Tags and Collars" },
-  { "articulo": "Wire mount sliding windows", "pn": "MB-3", "seccion": "Windows Parts" },
-  { "articulo": "SCREW TERMINAL LUG SLIDING WINDOW", "pn": "BACS12HN06-4", "seccion": "Windows Parts" },
-  { "articulo": "WASHER TERMINAL LUG SLIDING WINDOW", "pn": "MS35338-98", "seccion": "Windows Parts" },
-  { "articulo": "FLUKE117", "pn": "FLUKE117", "seccion": "Tools" },
-  { "articulo": "STAB TRIM CUTOUT TESTER", "pn": "C27007-46", "seccion": "Tools" },
-  { "articulo": "ELT ADT406AP 50 OHM DUMMY LOAD KIT", "pn": "112-3148", "seccion": "Tools" },
-  { "articulo": "PROBE OVHT AND TESTER", "pn": "BH17336A // BH16440-40", "seccion": "Tools" },
-  { "articulo": "TEMPCAL TESTER", "pn": "H394-230", "seccion": "Tools" },
-  { "articulo": "BONDING METER", "pn": "M1", "seccion": "Tools" },
-  { "articulo": "HAND HELD MULTIPURPOSE I/FACE HHMPI", "pn": "FDS400-301", "seccion": "Tools" },
-  { "articulo": "FIREX TEST CARGO", "pn": "C26006-1", "seccion": "Tools" },
-  { "articulo": "TEST SET / PITOT STATIC", "pn": "MPS45", "seccion": "Tools" },
-  { "articulo": "GROUND FAULT PROTECTION SYS TEST SET", "pn": "F72917-19", "seccion": "Tools" },
-  { "articulo": "PDL LAPTOP WITH TECHSAT PDL MKII", "pn": "TECHSATPDLLAPT0P", "seccion": "Tools" },
-  { "articulo": "FLUKE324 (CLAMP)", "pn": "FLUKE324", "seccion": "Tools" },
-  { "articulo": "CAJA RADIOALTIMETRO", "pn": "C34005-16", "seccion": "Tools" },
-  { "articulo": "RADIO ALTIMETER TEST SET", "pn": "DRA707", "seccion": "Tools" },
-  { "articulo": "TRAMMEL BAR", "pn": "F80055-1", "seccion": "Tools" },
-  { "articulo": "RUDDER PCU TEST SET", "pn": "C29002-17", "seccion": "Tools" },
-  { "articulo": "HIRFS", "pn": "906-10247-3 OR XLR-9703-01", "seccion": "Tools" },
-  { "articulo": "WTB FEEDTHROUGH CONNECTORS ADAPTER (HIRFS)", "pn": "WTBADAPTER", "seccion": "Tools" },
-  { "articulo": "TOOL CONNECTORS FOR BACKSHELLS", "pn": "CMS837", "seccion": "Tools" },
-  { "articulo": "KNIPEX CUTTING SAFTGLO", "pn": "9435215", "seccion": "Tools" },
-  { "articulo": "FIRE EXTINGUISHER BOTTLE SQUIB TESTER", "pn": "F80229-69", "seccion": "Tools" },
-  { "articulo": "WIRE JUMPER KIT MID-CABIN B737MAX", "pn": "RYR-EXITS-DDG-JUMPER-KIT", "seccion": "Tools" }
-];
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avionics SVQH - P/N List</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body { background-color: #0f172a; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
+    </style>
+</head>
+<body class="p-4 max-w-md mx-auto pb-20 pt-8">
+
+    <div class="fixed top-2 left-3 z-50 pointer-events-none">
+        <span class="text-[10px] font-black tracking-wider text-rose-500 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+            ONLY FOR REFERENCE
+        </span>
+    </div>
+
+    <header class="text-center my-4 mt-6">
+        <h1 class="text-2xl font-bold text-sky-400 tracking-wide">AVIONICS SVQH</h1>
+        <p class="text-xs text-slate-400">P/N, Tools & Ramps Tasks</p>
+    </header>
+
+    <div class="flex bg-slate-800 rounded-xl p-1 mb-4 text-xs font-semibold">
+        <button id="btn-lista" onclick="cambiarPestana('lista')" class="flex-1 py-2.5 rounded-lg text-center bg-sky-500 text-white transition-all">
+            🔍 Buscar
+        </button>
+        <button id="btn-ramps" onclick="cambiarPestana('ramps')" class="flex-1 py-2.5 rounded-lg text-center text-slate-400 transition-all">
+            📋 Ramps
+        </button>
+        <button id="btn-admin" onclick="cambiarPestana('admin')" class="flex-1 py-2.5 rounded-lg text-center text-slate-400 transition-all">
+            ➕ Añadir
+        </button>
+    </div>
+
+    <div id="pestana-lista" class="space-y-4">
+        <div class="relative">
+            <input type="text" id="buscador" oninput="filtrarYAgrupar()" placeholder="Buscar artículo o Part Number..." 
+                   class="w-full bg-slate-800 border border-slate-700 text-white placeholder-slate-400 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+        </div>
+
+        <p class="text-xs text-slate-400 pl-1"><span id="contador-items">0</span> piezas disponibles en total</p>
+
+        <div id="contenedor-secciones" class="space-y-3">
+            </div>
+    </div>
+
+    <div id="pestana-ramps" class="hidden space-y-6">
+        
+        <div class="space-y-4">
+            <h2 class="text-lg font-black text-amber-400 tracking-wider border-b-2 border-amber-500/20 pb-1">✈️ RAMPS NG</h2>
+            
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3 shadow-md">
+                <h3 class="text-xs font-bold text-sky-400 uppercase tracking-wide">RAMP 1 CHECK – RA800</h3>
+                <ul class="text-xs text-slate-300 space-y-2 list-disc pl-4 leading-relaxed">
+                    <li><span class="font-semibold text-slate-400">PAGE 2/ ITEM 4.</span> 24-31-11-710-801 MAIN BATTERY DISCHARGE CHECK.</li>
+                    <li><span class="font-semibold text-slate-400">PG10/ ITEM 22.</span> 25-RYR-19 CHECK ALL EMERGENCY LIGHTS.</li>
+                    <li><span class="font-semibold text-slate-400">PG13/ ITEM 25.</span> 52-RYR-03 FLIGHT DECK DOOR SYSTEM OPERATIONAL CHECK.</li>
+                    <li><span class="font-semibold text-slate-400">PG13/ ITEM 26.</span> END OF RAMP1/3/4 CHECK C/B’s & SWITCH CONFIG IAW RYR T/N 20/14.</li>
+                </ul>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3 shadow-md">
+                <h3 class="text-xs font-bold text-sky-400 uppercase tracking-wide">RAMP 2 CHECK – RA801</h3>
+                <ul class="text-xs text-slate-300 space-y-2 list-disc pl-4 leading-relaxed">
+                    <li><span class="font-semibold text-slate-400">PG1/ ITEM 1.</span> OPERATIONAL CHECK OF CVR IAW BTC 23-040-00-01 Ref: AMM: 23-71-00-710</li>
+                    <li><span class="font-semibold text-slate-400">PG2, PG3/ ITEM 2.</span> 23-100-00-01 OPERATIONALLY CHECK THE ELT.</li>
+                    <li><span class="font-semibold text-slate-400">PG5/ ITEM 9.</span> 33-010-00-01 OPERATIONAL CHECK OF THE EMERGENCY LIGHTS (RAMP 1).</li>
+                    <li><span class="font-semibold text-slate-400">PG6/ ITEM 10.</span> 33-RYR-01 OPERATIONAL CHECK OF PSU/ CABIN WALL /LAVATORY NO SMOKING / FASTEN SEAT BELT SIGN LIGHTS.</li>
+                    <li><span class="font-semibold text-slate-400">PG6/ ITEM 11.</span> 33-RYR-02 OPERATIONAL CHECK OF THE EXTERIOR LIGHTS AND THE CARGO HOLD LIGHTS.</li>
+                    <li><span class="font-semibold text-slate-400">PG7/ ITEM 12.</span> 33-RYR-03 CHECK OF THE COCKPIT INSTRUMENT AND PANEL LIGHTS.</li>
+                    <li><span class="font-semibold text-slate-400">PG7/ ITEM 13.</span> 33-RYR-04 OPERATIONAL CHECK OF THE PASSENGER COMPARTMENT LIGHTS.</li>
+                    <li><span class="font-semibold text-slate-400">PG8/ ITEM 15.</span> .9 EO.13/057 CHECK SPARE BULBS IN THE SPARE BULB COMPARTMENT.</li>
+                </ul>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3 shadow-md">
+                <h3 class="text-xs font-bold text-sky-400 uppercase tracking-wide">RAMP-3 CHECK - RA901</h3>
+                <ul class="text-xs text-slate-300 space-y-2 list-disc pl-4 leading-relaxed">
+                    <li><span class="font-semibold text-slate-400">PG1/ ITEM 2.</span> 21-150-00-01 CLEAN OR REPLACE THE CABIN TEMPERATURE SENSOR FILTERS.</li>
+                    <li><span class="font-semibold text-slate-400">PG7/ ITEM 10.</span> END OF RAMP-3/4 CHECK C/B’s & SWITCH CONFIG IAW RYR T/N 20/14.</li>
+                </ul>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3 shadow-md">
+                <h3 class="text-xs font-bold text-sky-400 uppercase tracking-wide">RAMP-4 CHECK - RA902</h3>
+                <ul class="text-xs text-slate-300 space-y-2 list-disc pl-4 leading-relaxed">
+                    <li><span class="font-semibold text-slate-400">PG1/ ITEM 3.</span> 27-162-00-01 OPERATIONAL CHECK THE FLAP SKEW AND ASYMMETRY SYSTEM AMM: 27-51-00-740</li>
+                    <li><span class="font-semibold text-slate-400">PG2/ ITEM 4.</span> 27-224-00-01 OPERATIONAL CHECK THE LEADING EDGE DEVICES UNCOMMANDED MOTION PROTECTION AMM: 27-81-00-710.</li>
+                    <li><span class="font-semibold text-slate-400">PG3/ ITEM 6.</span> 29-230-00-01 OPERATIONAL CHECK THE STANDBY RUDDER SYSTEM AMM: 29-21-00-700.</li>
+                    <li><span class="font-semibold text-slate-400">PG4/ ITEM 8.</span> END OF RAMP-3/4 CHECK C/B’s & SWITCH CONFIG IAW RYR T/N 20/14.</li>
+                </ul>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3 shadow-md">
+                <h3 class="text-xs font-bold text-sky-400 uppercase tracking-wide">50FC CHECK – RA858</h3>
+                <ul class="text-xs text-slate-300 space-y-2 list-disc pl-4 leading-relaxed">
+                    <li><span class="font-semibold text-slate-400">PG1/ ITEM 3.</span> SPCU AMM: 24-34-00-710</li>
+                    <li><span class="font-semibold text-slate-400">PG1/ ITEM 5.</span> E/E EQUIPMENT CLEANING AND WEATHER RADAR TX/RX INSPECTION</li>
+                    <li><span class="font-semibold text-slate-400">PG2/ ITEM 6.</span> COCKPIT CLEAN AMM: 31-62-11-100-801</li>
+                    <li><span class="font-semibold text-slate-400">PG2/ ITEM 7.</span> P5 GUARDS</li>
+                    <li><span class="font-semibold text-slate-400">PG3/ ITEM 9.</span> GEAR LIGHTS (MASTER DIM TEST)</li>
+                    <li><span class="font-semibold text-slate-400">PG4/ ITEM 12.</span> FMC CDU LEFT ENGINE (SHORT TIME FAULTS)</li>
+                    <li><span class="font-semibold text-slate-400">PG5/ ITEM 13.</span> FMC CDU RIGHT ENGINE (SHORT TIME FAULTS)</li>
+                    <li><span class="font-semibold text-slate-400">PG6/ ITEM 14.</span> BITE CHECK PACK ZONE AMM 21-61-00-700-806-002</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="space-y-4 pt-4 border-t border-slate-800">
+            <h2 class="text-lg font-black text-emerald-400 tracking-wider border-b-2 border-emerald-500/20 pb-1">🚀 RAMPS MAX</h2>
+            
+            <div class="bg-slate-90
